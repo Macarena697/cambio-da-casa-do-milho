@@ -20,6 +20,13 @@ const setupEventHandlers = () => {
       handleSearchEvent();
     }
   });
+
+  const inputValueMultiply = document.querySelector('#value-multiply');
+  inputValueMultiply.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+      handleSearchEvent();
+    }
+  })
 }
 
 const handleSearchEvent = () => {
@@ -63,7 +70,7 @@ const handleError = (errorMessage) => {
 }
 
 const handleRates = (rates) => {
-  const ratesKeys = Object.keys(rates);
+  const ratesKeys = Object.keys(rates).sort();
   
   ratesKeys.forEach((key) => {
     const value = rates[key];
@@ -72,11 +79,22 @@ const handleRates = (rates) => {
 }
 
 const renderRate = (key, value) => {
+  let inputValueMultiply = document.querySelector('#value-multiply').value;
   const currencyList = document.querySelector('#currency-list');
-  const formattedValue = value.toFixed(2);
+
+  if (!inputValueMultiply) { 
+    inputValueMultiply = 1;
+  }
+  const formattedValue = (value * inputValueMultiply).toFixed(2);
 
   const li = document.createElement('li');
   li.innerHTML = `<b>${key}:</b> ${formattedValue}`;
-
   currencyList.appendChild(li);
 }
+
+const currencyList = document.querySelector('#currency-list');
+currencyList.addEventListener('click', (event) => {
+  let clearList = event.target;
+  clearList.innerHTML = '';
+  clearList.outerHTML = '';
+});
